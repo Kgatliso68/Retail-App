@@ -1,0 +1,66 @@
+﻿@model ABCRetailAzureApp.Models.CustomerProfile
+@{
+    ViewData["Title"] = "Customer Details";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2><i class="fas fa-user"></i> Customer Details</h2>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.CustomerId" class="btn btn-warning">
+            <i class="fas fa-edit"></i> Edit
+        </a>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-list"></i> Back to List
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>@Model.FullName</h4>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.CustomerId)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.CustomerId)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.FirstName)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.FirstName)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.LastName)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.LastName)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Email)</dt>
+                    <dd class="col-sm-8">
+                        <a href="mailto:@Model.Email">@Html.DisplayFor(model => model.Email)</a>
+                    </dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.PhoneNumber)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.PhoneNumber)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Address)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Address)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.City)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.City)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Country)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Country)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.DateOfBirth)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.DateOfBirth)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.PreferredCategory)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.PreferredCategory)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.ReceiveMarketing)</dt>
+                    <dd class="col-sm-8">
+                        @(Model.ReceiveMarketing ? "Yes" : "No")
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>

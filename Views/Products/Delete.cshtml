@@ -1,0 +1,107 @@
+﻿@model ABCRetailAzureApp.Models.Product
+@{
+    ViewData["Title"] = "Delete Product";
+}
+
+<h2><i class="fas fa-trash"></i> Delete Product</h2>
+<hr />
+
+<div class="alert alert-warning">
+    <h4><i class="fas fa-exclamation-triangle"></i> Confirm Deletion</h4>
+    <p>Are you sure you want to delete this product? This action will remove the product from Azure Table Storage and delete its image from Azure Blob Storage. This action cannot be undone.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" class="card-img-top" alt="@Model.ProductName" style="height: 250px; object-fit: cover;">
+            }
+            else
+            {
+                <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 250px;">
+                    <i class="fas fa-image fa-3x text-muted"></i>
+                </div>
+            }
+            <div class="card-body">
+                <h4 class="card-title">@Model.ProductName</h4>
+                <p class="card-text">@Model.Description</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4>Product Information</h4>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.ProductId)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.ProductId)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Price)</dt>
+                    <dd class="col-sm-8">@Model.Price.ToString("C")</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Category)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Category)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Brand)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Brand)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.StockQuantity)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.StockQuantity)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.CreatedDate)</dt>
+                    <dd class="col-sm-8">@Model.CreatedDate.ToString("MM/dd/yyyy")</dd>
+                </dl>
+
+                <form asp-action="Delete" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Yes, Delete Product
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5><i class="fas fa-exclamation-triangle"></i> What will be deleted?</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-table"></i> Azure Table Storage</h6>
+                        <ul>
+                            <li>Product information will be permanently removed</li>
+                            <li>All product metadata will be deleted</li>
+                            <li>Cannot be recovered</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-images"></i> Azure Blob Storage</h6>
+                        <ul>
+                            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                            {
+                                <li>Product image will be deleted from blob storage</li>
+                                <li>Image URL will become invalid</li>
+                                <li>Cannot be recovered</li>
+                            }
+                            else
+                            {
+                                <li>No image to delete</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

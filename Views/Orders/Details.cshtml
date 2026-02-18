@@ -1,0 +1,109 @@
+﻿@model ABCRetailAzureApp.Models.Order
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<h1>Order Details - @Model.OrderId</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<div class="mb-3">
+    <strong>Customer ID:</strong> @Model.CustomerId<br />
+    <strong>Status:</strong> @Model.Status<br />
+    <strong>Total Amount:</strong> @Model.TotalAmount.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-ZA"))<br />
+    <strong>Created Date:</strong> @Model.CreatedDate.ToString("yyyy-MM-dd HH:mm")<br />
+    <strong>Updated Date:</strong> @(Model.UpdatedDate.HasValue ? Model.UpdatedDate.Value.ToString("yyyy-MM-dd HH:mm") : "-")<br />
+    <strong>Shipping Address:</strong> @Model.ShippingAddress<br />
+    <strong>Payment Method:</strong> @Model.PaymentMethod
+</div>
+
+<h3>Items</h3>
+@if (Model.Items != null && Model.Items.Any())
+{
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Product ID</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.ProductId</td>
+                    <td>@item.ProductName</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Price.ToString("C")</td>
+                    <td>@item.TotalPrice.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No items in this order.</p>
+}
+
+<h3>Actions</h3>
+
+@*  *@
+@if (Model.Status != ABCRetailAzureApp.Models.OrderStatus.Cancelled.ToString() &&
+    Model.Status != ABCRetailAzureApp.Models.OrderStatus.Delivered.ToString())
+{
+    <form asp-action="UpdateStatus" method="post" class="mb-2 d-inline">
+        <input type="hidden" name="orderId" value="@Model.OrderId" />
+        <input type="hidden" name="customerId" value="@Model.CustomerId" />
+        <select name="status" class="form-select w-auto d-inline">
+            @foreach (var status in Enum.GetValues(typeof(ABCRetailAzureApp.Models.OrderStatus)))
+            {
+                <option value="@status" selected="@(Model.Status == status.ToString())">@status</option>
+            }
+        </select>
+        <button type="submit" class="btn btn-primary btn-sm">Update Status</button>
+    </form>
+}
+
+@if (Model.Status != ABCRetailAzureApp.Models.OrderStatus.Cancelled.ToString() &&
+    Model.Status != ABCRetailAzureApp.Models.OrderStatus.Delivered.ToString())
+{
+    <form asp-action="Cancel" method="post" class="d-inline">
+        <input type="hidden" name="orderId" value="@Model.OrderId" />
+        <input type="hidden" name="customerId" value="@Model.CustomerId" />
+        <button type="submit" class="btn btn-danger btn-sm">Cancel Order</button>
+    </form>
+}
+
+@if (Model.Status == ABCRetailAzureApp.Models.OrderStatus.Pending.ToString() ||
+    Model.Status == ABCRetailAzureApp.Models.OrderStatus.Confirmed.ToString())
+{
+    <form asp-action="ProcessPayment" method="post" class="d-inline">
+        <input type="hidden" name="orderId" value="@Model.OrderId" />
+        <input type="hidden" name="customerId" value="@Model.CustomerId" />
+        <button type="submit" class="btn btn-success btn-sm">Process Payment</button>
+    </form>
+}
+
+@if (Model.Status == ABCRetailAzureApp.Models.OrderStatus.PaymentProcessing.ToString() ||
+    Model.Status == ABCRetailAzureApp.Models.OrderStatus.Confirmed.ToString())
+{
+    <form asp-action="Fulfill" method="post" class="d-inline">
+        <input type="hidden" name="orderId" value="@Model.OrderId" />
+        <input type="hidden" name="customerId" value="@Model.CustomerId" />
+        <button type="submit" class="btn btn-info btn-sm">Fulfill Order</button>
+    </form>
+}
+
+<a asp-action="Index" asp-route-customerId="@Model.CustomerId" class="btn btn-secondary mt-3">Back to Orders</a>
