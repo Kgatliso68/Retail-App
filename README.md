@@ -266,11 +266,3 @@ Contributors
 Kgatliso - Project Developer
 ABC Retail - Business Requirements
 
-### Version History
-
-v1.0 - Initial release with core Azure services integration
-
-Customer Management
-Product Management
-Order Processing
-Azure Table, Blob, Queue, and File Storage integration
