@@ -1,0 +1,105 @@
+﻿@model ABCRetailAzureApp.Models.Product
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2><i class="fas fa-box"></i> Product Details</h2>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.ProductId" class="btn btn-warning">
+            <i class="fas fa-edit"></i> Edit
+        </a>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-list"></i> Back to List
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <img src="@Model.ImageUrl" class="img-fluid rounded mb-3" alt="@Model.ProductName" style="max-height: 400px; width: 100%; object-fit: contain;">
+                    <p class="text-muted"><small><i class="fas fa-cloud"></i> </small></p>
+                }
+                else
+                {
+                    <div class="d-flex align-items-center justify-content-center bg-light rounded mb-3" style="height: 300px;">
+                        <div class="text-center">
+                            <i class="fas fa-image fa-3x text-muted mb-2"></i>
+                            <p class="text-muted">No image available</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4>@Model.ProductName</h4>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">@Html.DisplayNameFor(m => m.ProductId)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(m => m.ProductId)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(m => m.Description)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(m => m.Description)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(m => m.Price)</dt>
+                    <dd class="col-sm-8">
+                        <span class="h4 text-primary">
+                            @Model.Price.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-ZA"))
+                        </span>
+                    </dd>
+
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(m => m.Category)</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge bg-primary">@Model.Category</span>
+                    </dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(m => m.Brand)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(m => m.Brand)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(m => m.StockQuantity)</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.StockQuantity > 0)
+                        {
+                            <span class="badge bg-success">@Model.StockQuantity in stock</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Out of stock</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(m => m.IsActive)</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.IsActive)
+                        {
+                            <span class="badge bg-success"><i class="fas fa-check"></i> Active</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger"><i class="fas fa-times"></i> Inactive</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(m => m.CreatedDate)</dt>
+                    <dd class="col-sm-8">@Model.CreatedDate.ToString("MMMM dd, yyyy 'at' h:mm tt")</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(m => m.LastUpdated)</dt>
+                    <dd class="col-sm-8">@Model.LastUpdated.ToString("MMMM dd, yyyy 'at' h:mm tt")</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

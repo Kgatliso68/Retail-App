@@ -1,0 +1,111 @@
+﻿@model ABCRetailAzureApp.Models.ViewModels.CreateOrderViewModel
+@{
+    ViewData["Title"] = "Create Order";
+}
+
+<h2>Create Order</h2>
+
+
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="CustomerId" class="control-label">Customer</label>
+        <select asp-for="CustomerId" class="form-control" asp-items="ViewBag.Customers">
+            <option value="">-- Select Customer --</option>
+        </select>
+        <span asp-validation-for="CustomerId" class="text-danger"></span>
+    </div>
+
+    
+    <div class="form-group">
+        <label asp-for="ShippingAddress" class="control-label">Shipping Address</label>
+        <textarea asp-for="ShippingAddress" class="form-control" rows="3" placeholder="Enter shipping address"></textarea>
+        <span asp-validation-for="ShippingAddress" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PaymentMethod" class="control-label">Payment Method</label>
+        <select asp-for="PaymentMethod" class="form-control">
+            <option value="">-- Select Payment Method --</option>
+            <option value="Credit Card">Credit Card</option>
+            <option value="Debit Card">Debit Card</option>
+            <option value="PayPal">PayPal</option>
+            <option value="Bank Transfer">Bank Transfer</option>
+            <option value="Cash on Delivery">Cash on Delivery</option>
+        </select>
+        <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+    </div>
+
+    <h4>Products</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price (R)</th>
+                <th>Quantity</th>
+                <th>Total (R)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.OrderItems.Count; i++)
+            {
+                <tr>
+                    <td>@Model.OrderItems[i].ProductName</td>
+                    <td>R @Model.OrderItems[i].Price.ToString("F2")</td>
+                    <td>
+                        <input asp-for="OrderItems[@i].Quantity" class="form-control quantity-input" type="number" min="0" data-price="@Model.OrderItems[i].Price" data-row="@i" />
+                        <input type="hidden" asp-for="OrderItems[@i].ProductId" />
+                        <input type="hidden" asp-for="OrderItems[@i].ProductName" />
+                        <input type="hidden" asp-for="OrderItems[@i].Price" />
+                    </td>
+                    <td class="subtotal" id="subtotal-@i">
+                        R 0.00
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="3">Total Amount:</th>
+                <th id="total-amount">R 0.00</th>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="form-group mt-3">
+        <input type="submit" value="Create Order" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+       
+        function calculateTotals() {
+            let grandTotal = 0;
+
+            $('.quantity-input').each(function() {
+                const quantity = parseInt($(this).val()) || 0;
+                const price = parseFloat($(this).data('price')) || 0;
+                const rowIndex = $(this).data('row');
+                const subtotal = quantity * price;
+
+                $(`#subtotal-${rowIndex}`).text(`R ${subtotal.toFixed(2)}`);
+                grandTotal += subtotal;
+            });
+
+            $('#total-amount').text(`R ${grandTotal.toFixed(2)}`);
+        }
+
+        
+        $(document).ready(function() {
+            $('.quantity-input').on('input change', calculateTotals);
+            calculateTotals(); 
+        });
+    </script>
+}
